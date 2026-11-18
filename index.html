@@ -20,7 +20,7 @@
     --text-soft: #634b3e;
     --shadow: 0 8px 20px rgba(139, 21, 40, 0.15);
     
-    /* New Bright Envelope Colors */
+    /* Bright Envelope Colors */
     --env-bright: #e53935;
     --env-dark: #d32f2f;
 
@@ -122,7 +122,6 @@
     width: 100%; display: block;
   }
   
-  /* Lace-like Flap with Bright Color */
   .flap {
     position: absolute; inset: 0 0 auto 0; height: 100%;
     clip-path: polygon(0 0, 100% 0, 50% 68%);
@@ -133,7 +132,6 @@
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
   }
   
-  /* Delicate lace pattern overlay */
   .flap::before {
     content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
     background-image: radial-gradient(rgba(255, 255, 255, 0.25) 1px, transparent 1px);
@@ -165,7 +163,6 @@
     z-index: 2;
   }
   
-  /* Inner Card that slides up */
   .envelope-card {
     position: absolute; inset: 5% 5%; background: var(--cream-bg); 
     border: 2px solid var(--gold); border-radius: 4px; 
@@ -219,6 +216,21 @@
   #scratchCanvas { 
     position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
     cursor: crosshair; touch-action: none; z-index: 2;
+  }
+
+  /* ---------- Hidden Dates Prompt ---------- */
+  .scratch-prompt-msg {
+    margin: 30px 15px;
+    padding: 20px;
+    border: 2px dashed var(--gold-dark);
+    border-radius: 8px;
+    background: rgba(212, 175, 55, 0.08);
+    color: var(--maroon);
+    font-family: var(--font-body);
+    font-size: 1.1rem;
+    font-weight: 700;
+    line-height: 1.4;
+    animation: pulse 2s infinite;
   }
 
   /* ---------- Countdown ---------- */
@@ -332,8 +344,8 @@
         <div class="details-grid-content" id="scratchContent">
           <div class="detail-item">
             <div class="detail-icon">🗓️</div>
-            <div class="detail-title">दिनांक</div>
-            <div class="detail-text">२७ जानेवारी<br>२०२७</div>
+            <div class="detail-title">दिनांक व वार</div>
+            <div class="detail-text">बुधवार, २७ जानेवारी<br>२०२७</div>
           </div>
           <div class="divider-vertical"></div>
           <div class="detail-item">
@@ -346,57 +358,62 @@
         <canvas id="scratchCanvas"></canvas>
       </div>
 
-      <!-- Countdown -->
-      <div class="text-center">
-        <div style="font-size: 0.95rem; color: var(--maroon); font-weight: 700; margin-top: 10px;">लग्नघटिका समीप आली...</div>
-        <div class="countdown" id="countdown">
-          <div class="unit"><div class="num" id="cd-days">00</div><div class="unit-label">दिवस</div></div>
-          <div class="unit"><div class="num" id="cd-hours">00</div><div class="unit-label">तास</div></div>
-          <div class="unit"><div class="num" id="cd-mins">00</div><div class="unit-label">मिनिटे</div></div>
-          <div class="unit"><div class="num" id="cd-secs">00</div><div class="unit-label">सेकंद</div></div>
-        </div>
+      <!-- Visible message asking user to scratch before seeing the rest -->
+      <div id="scratchPromptMsg" class="scratch-prompt-msg text-center">
+        ✨ संपूर्ण कार्यक्रमांची रूपरेषा आणि वेळ पाहण्यासाठी वर स्क्रॅच करा ✨
       </div>
 
-      <!-- Schedule of Events (संगीत, हळद, विवाह) -->
-      <div class="schedule-container text-center">
-        <h2 class="section-title">कार्यक्रमांची रूपरेषा</h2>
-        <div class="schedule">
-          
-          <!-- Sangeet Event -->
-          <div class="event-card">
-            <div class="event-icon">🎵</div>
-            <div class="evt-date">२६ जानेवारी २०२७</div>
-            <h3 class="evt-name">संगीत रजनी</h3>
-            <div class="evt-meta">सायंकाळी ७:०० वाजेपासून</div>
+      <!-- Hidden Section (Revealed AFTER Scratching) -->
+      <div id="hiddenEventsSection" style="display: none; opacity: 0; transition: opacity 0.8s ease;">
+        
+        <!-- Countdown -->
+        <div class="text-center">
+          <div style="font-size: 0.95rem; color: var(--maroon); font-weight: 700; margin-top: 10px;">लग्नघटिका समीप आली...</div>
+          <div class="countdown" id="countdown">
+            <div class="unit"><div class="num" id="cd-days">00</div><div class="unit-label">दिवस</div></div>
+            <div class="unit"><div class="num" id="cd-hours">00</div><div class="unit-label">तास</div></div>
+            <div class="unit"><div class="num" id="cd-mins">00</div><div class="unit-label">मिनिटे</div></div>
+            <div class="unit"><div class="num" id="cd-secs">00</div><div class="unit-label">सेकंद</div></div>
           </div>
-
-          <!-- Haldi Event -->
-          <div class="event-card">
-            <div class="event-icon">🌿</div>
-            <div class="evt-date">२६ जानेवारी २०२७</div>
-            <h3 class="evt-name">हळद समारंभ</h3>
-            <div class="evt-meta">रात्री ९:०० वाजता</div>
-          </div>
-
-          <!-- Wedding Event -->
-          <div class="event-card">
-            <div class="event-icon">✨</div>
-            <div class="evt-date">२७ जानेवारी २०२७</div>
-            <h3 class="evt-name">विवाह सोहळा</h3>
-            <div class="evt-meta">दुपारी १२:२१ वाजता</div>
-          </div>
-
         </div>
-      </div>
 
-      <!-- Google Maps Section (One Venue for all) -->
+        <!-- Schedule of Events (संगीत, हळद, विवाह) -->
+        <div class="schedule-container text-center">
+          <h2 class="section-title">कार्यक्रमांची रूपरेषा</h2>
+          <div class="schedule">
+            <!-- Sangeet Event -->
+            <div class="event-card">
+              <div class="event-icon">🎵</div>
+              <div class="evt-date">मंगळवार, २६ जानेवारी २०२७</div>
+              <h3 class="evt-name">संगीत रजनी</h3>
+              <div class="evt-meta">सायंकाळी ७:०० वाजेपासून</div>
+            </div>
+            <!-- Haldi Event -->
+            <div class="event-card">
+              <div class="event-icon">🌿</div>
+              <div class="evt-date">मंगळवार, २६ जानेवारी २०२७</div>
+              <h3 class="evt-name">हळद समारंभ</h3>
+              <div class="evt-meta">रात्री ९:०० वाजता</div>
+            </div>
+            <!-- Wedding Event -->
+            <div class="event-card">
+              <div class="event-icon">✨</div>
+              <div class="evt-date">बुधवार, २७ जानेवारी २०२७</div>
+              <h3 class="evt-name">विवाह सोहळा</h3>
+              <div class="evt-meta">दुपारी १२:२१ वाजता</div>
+            </div>
+          </div>
+        </div>
+
+      </div> <!-- End of Hidden Events Section -->
+
+      <!-- Google Maps Section -->
       <div class="map-section">
         <h2 class="section-title">विवाह व सर्व कार्यक्रमांचे स्थळ</h2>
         <div class="map-card">
           <div class="map-address">
             दिलेल्या लिंकवर क्लिक करून गुगल मॅप्सवर अचूक पत्ता पहा.
           </div>
-          <!-- Direct Link Button -->
           <a href="https://maps.app.goo.gl/2AXZsMtM6FREojoy8" target="_blank" class="map-btn">
             📍 Google Maps वर स्थळ पहा
           </a>
@@ -439,7 +456,6 @@
       petal.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
       petal.style.animationDuration = (Math.random() * 4 + 4) + 's';
       petal.style.animationDelay = (Math.random() * 1.5) + 's';
-      // Randomly scale the petals for depth
       const scale = Math.random() * 0.6 + 0.6;
       petal.style.transform = `scale(${scale})`;
       document.body.appendChild(petal);
@@ -480,20 +496,21 @@
               initCanvas();
             }, 600);
             
-          }, 1200); // Hold the slid-up card for a moment
+          }, 1200);
 
-        }, 600); // Wait for flap to open before sliding up
+        }, 600); 
 
       }, 300);
 
     }, 200);
   });
 
-  // ---- Scratch to Reveal Canvas Fix (Multiline text & Responsive) ----
+  // ---- Scratch to Reveal & Unhide Dates Logic ----
   const canvas = document.getElementById('scratchCanvas');
   const ctx = canvas.getContext('2d');
   let isDrawing = false;
   let hasScratched = false;
+  let detailsRevealed = false; // Flag to track if hidden section is shown
 
   function initCanvas() {
     if (hasScratched) return; 
@@ -514,7 +531,7 @@
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     
-    // Text split into two lines to prevent cutting off on smaller screens
+    // Text split into two lines
     ctx.fillText("✨ तारीख आणि वेळ पाहण्यासाठी", canvas.width / 2, canvas.height / 2 - 12);
     ctx.fillText("स्क्रॅच करा ✨", canvas.width / 2, canvas.height / 2 + 12);
     
@@ -537,6 +554,25 @@
     ctx.beginPath();
     ctx.arc(x, y, 25, 0, Math.PI * 2);
     ctx.fill();
+
+    // Reveal hidden dates and schedules on FIRST scratch interaction
+    if (!detailsRevealed) {
+      detailsRevealed = true;
+      
+      // Hide the prompt message
+      document.getElementById('scratchPromptMsg').style.display = 'none';
+      
+      // Unhide the countdown and events block smoothly
+      const hiddenSection = document.getElementById('hiddenEventsSection');
+      hiddenSection.style.display = 'block';
+      
+      // Small delay allows the browser to process 'display: block' before changing opacity
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          hiddenSection.style.opacity = '1';
+        });
+      });
+    }
   }
 
   // Helper for coordinates
