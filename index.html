@@ -19,6 +19,10 @@
     --text-main: #3a2218;
     --text-soft: #634b3e;
     --shadow: 0 8px 20px rgba(139, 21, 40, 0.15);
+    
+    /* New Bright Envelope Colors */
+    --env-bright: #e53935;
+    --env-dark: #d32f2f;
 
     --font-title: 'Tiro Devanagari Marathi', serif;
     --font-body: 'Mukta', sans-serif;
@@ -112,28 +116,28 @@
   }
   
   .envelope {
-    position: relative; background: #faf5eb; border-radius: 6px; 
-    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-    padding-top: 65%; cursor: pointer; border: 1px solid var(--gold-light); 
+    position: relative; background: var(--env-dark); border-radius: 6px; 
+    box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+    padding-top: 65%; cursor: pointer; border: 1px solid #b71c1c; 
     width: 100%; display: block;
   }
   
-  /* Lace-like Flap inspired by the video */
+  /* Lace-like Flap with Bright Color */
   .flap {
     position: absolute; inset: 0 0 auto 0; height: 100%;
     clip-path: polygon(0 0, 100% 0, 50% 68%);
-    background: #fffefb;
+    background: linear-gradient(135deg, var(--env-bright), var(--env-dark));
     border-radius: 6px 6px 0 0; transform-origin: top center;
     transition: transform 1s cubic-bezier(0.6, -0.1, 0.2, 1); transform-style: preserve-3d; z-index: 3;
-    border-bottom: 1px solid rgba(212, 175, 55, 0.3);
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    border-bottom: 2px solid var(--gold);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
   }
   
   /* Delicate lace pattern overlay */
   .flap::before {
     content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-    background-image: radial-gradient(rgba(212, 175, 55, 0.15) 1px, transparent 1px);
-    background-size: 8px 8px; opacity: 0.6;
+    background-image: radial-gradient(rgba(255, 255, 255, 0.25) 1px, transparent 1px);
+    background-size: 8px 8px; opacity: 0.8;
   }
   
   .envelope.open .flap { transform: rotateX(178deg); }
@@ -149,13 +153,11 @@
     transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s ease;
   }
   .seal::after {
-    /* Inner embossed ring */
     content: ''; position: absolute;
     width: 54px; height: 54px; border-radius: 50%;
     border: 2px solid rgba(170, 119, 0, 0.7);
     box-shadow: inset 0 2px 5px rgba(0,0,0,0.3);
   }
-  /* Floral stamp inside wax */
   .seal svg {
     width: 32px; height: 32px;
     fill: #8c5d00;
@@ -172,7 +174,6 @@
     transition: opacity 0.6s ease, transform 1s cubic-bezier(0.2, 0.8, 0.2, 1); z-index: 2;
     box-shadow: 0 -5px 15px rgba(0,0,0,0.1);
   }
-  /* The slide-up state */
   .envelope-card.slide-up {
     opacity: 1; transform: translateY(-70px);
   }
@@ -263,6 +264,15 @@
   /* ---------- Footer ---------- */
   .footer-blessings { margin-top: 25px; padding-top: 15px; border-top: 1px solid var(--gold-light); font-family: var(--font-title); font-size: 1.1rem; color: var(--maroon); }
   .footer-blessings span { font-size: 0.85rem; color: var(--text-soft); font-family: var(--font-body); display: block; margin-top: 5px;}
+
+  /* Responsive Adjustments for very small screens */
+  @media (max-width: 380px) {
+    .main-title { font-size: 2rem; }
+    .couple-names h2 { font-size: 1.4rem; }
+    .divider-vertical { display: none; }
+    .detail-item { flex: 1 1 100%; margin-bottom: 10px; border-bottom: 1px dashed var(--gold-light); padding-bottom: 10px;}
+    .detail-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0;}
+  }
 </style>
 </head>
 <body>
@@ -479,7 +489,7 @@
     }, 200);
   });
 
-  // ---- Scratch to Reveal Canvas ----
+  // ---- Scratch to Reveal Canvas Fix (Multiline text & Responsive) ----
   const canvas = document.getElementById('scratchCanvas');
   const ctx = canvas.getContext('2d');
   let isDrawing = false;
@@ -497,12 +507,16 @@
     ctx.fillStyle = '#8b1528'; 
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     
-    // Instruction Text
-    ctx.font = "bold 16px 'Mukta', sans-serif";
+    // Responsive font sizing based on device width
+    let fontSize = canvas.width < 320 ? 14 : 16;
+    ctx.font = `bold ${fontSize}px 'Mukta', sans-serif`;
     ctx.fillStyle = '#f3e5ab';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.fillText("✨ तारीख आणि वेळ पाहण्यासाठी स्क्रॅच करा ✨", canvas.width / 2, canvas.height / 2);
+    
+    // Text split into two lines to prevent cutting off on smaller screens
+    ctx.fillText("✨ तारीख आणि वेळ पाहण्यासाठी", canvas.width / 2, canvas.height / 2 - 12);
+    ctx.fillText("स्क्रॅच करा ✨", canvas.width / 2, canvas.height / 2 + 12);
     
     document.getElementById('scratchContent').style.visibility = 'visible';
   }
@@ -549,7 +563,6 @@
   canvas.addEventListener('touchend', stopScratch);
 
   // ---- Countdown Timer ----
-  // Set to Jan 27, 2027 12:21 PM
   const weddingDate = new Date('2027-01-27T12:21:00');
   
   function tick() {
